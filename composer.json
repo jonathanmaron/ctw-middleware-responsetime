@@ -1,7 +1,7 @@
 {
     "name": "ctw/ctw-middleware-response-time",
     "type": "library",
-    "description": "This middleware adds an X-Response-Time in milliseconds to the Response header.\n\n",
+    "description": "This PSR-15 middleware adds an X-Response-Time in milliseconds to the Response header.\n\n",
     "license": "BSD-3-Clause",
     "config": {
         "sort-packages": true
