@@ -9,7 +9,7 @@ use Middlewares\Utils\Factory;
 
 class ResponseTimeMiddlewareTest extends AbstractCase
 {
-    public function testResponseTimeMiddleware()
+    public function testResponseTimeMiddleware(): void
     {
         $stack    = [
             new ResponseTimeMiddleware(),
@@ -21,7 +21,7 @@ class ResponseTimeMiddlewareTest extends AbstractCase
         self::assertMatchesRegularExpression('/^\d{1,4}\.\d{3} ms$/', $string);
     }
 
-    public function testResponseTimeMiddlewareAsFloat()
+    public function testResponseTimeMiddlewareAsFloat(): void
     {
         $serverParams = [
             'REQUEST_TIME_FLOAT' => microtime(true),
