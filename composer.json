@@ -11,6 +11,7 @@
         "ctw/ctw-middleware": "^1.0"
     },
     "require-dev": {
+        "laminas/laminas-diactoros": "^2.5",
         "phpstan/phpstan": "^0.12",
         "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "^3.5",
@@ -23,7 +24,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "CtwTest\\Middleware\\ResponseTimeMiddleware\\": "src"
+            "CtwTest\\Middleware\\ResponseTimeMiddleware\\": "test"
         }
     },
     "scripts": {
