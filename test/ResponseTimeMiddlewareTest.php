@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace CtwTest\Middleware\ResponseTimeMiddleware;
 
 use Ctw\Middleware\ResponseTimeMiddleware\ResponseTimeMiddleware;
+use Ctw\Middleware\ResponseTimeMiddleware\ResponseTimeMiddlewareFactory;
+use Laminas\ServiceManager\ServiceManager;
 use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
 
@@ -12,7 +14,7 @@ class ResponseTimeMiddlewareTest extends AbstractCase
     public function testResponseTimeMiddleware(): void
     {
         $stack    = [
-            new ResponseTimeMiddleware(),
+            $this->getInstance(),
         ];
         $response = Dispatcher::run($stack);
 
@@ -28,12 +30,20 @@ class ResponseTimeMiddlewareTest extends AbstractCase
         ];
         $request      = Factory::createServerRequest('GET', '/', $serverParams);
         $stack        = [
-            new ResponseTimeMiddleware(),
+            $this->getInstance(),
         ];
         $response     = Dispatcher::run($stack, $request);
 
         $string = $response->getHeaderLine('X-Response-Time');
 
         $this->assertMatchesRegularExpression('/^\d{1,4}\.\d{3} ms$/', $string);
+    }
+
+    private function getInstance(): ResponseTimeMiddleware
+    {
+        $container = new ServiceManager();
+        $factory   = new ResponseTimeMiddlewareFactory();
+
+        return $factory->__invoke($container);
     }
 }
