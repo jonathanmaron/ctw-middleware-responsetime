@@ -20,7 +20,7 @@ class ResponseTimeMiddlewareTest extends AbstractCase
 
         $string = $response->getHeaderLine('X-Response-Time');
 
-        $this->assertMatchesRegularExpression('/^\d{1,4}\.\d{3} ms$/', $string);
+        self::assertMatchesRegularExpression('/^\d{1,4}\.\d{3} ms$/', $string);
     }
 
     public function testResponseTimeMiddlewareAsFloat(): void
@@ -36,7 +36,7 @@ class ResponseTimeMiddlewareTest extends AbstractCase
 
         $string = $response->getHeaderLine('X-Response-Time');
 
-        $this->assertMatchesRegularExpression('/^\d{1,4}\.\d{3} ms$/', $string);
+        self::assertMatchesRegularExpression('/^\d{1,4}\.\d{3} ms$/', $string);
     }
 
     private function getInstance(): ResponseTimeMiddleware
