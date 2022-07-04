@@ -5,7 +5,8 @@
     "type": "library",
     "require": {
         "php": "^7.4 || ^8.0",
-        "ctw/ctw-middleware": "dev-php81"
+        "ctw/ctw-middleware": "dev-php81",
+        "psr/container": "^1.0 || ^2.0"
     },
     "require-dev": {
         "phpstan/extension-installer": "^1.1",
