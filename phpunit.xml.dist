@@ -15,7 +15,7 @@
         </report>
     </coverage>
     <testsuites>
-        <testsuite name="CtwTest\Middleware\ResponseTimeMiddleware">
+        <testsuite name="ctw/ctw-middleware-response-time">
             <directory>test</directory>
         </testsuite>
     </testsuites>
