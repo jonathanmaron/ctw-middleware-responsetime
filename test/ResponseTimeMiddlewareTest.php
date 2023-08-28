@@ -13,9 +13,7 @@ class ResponseTimeMiddlewareTest extends AbstractCase
 {
     public function testResponseTimeMiddleware(): void
     {
-        $stack    = [
-            $this->getInstance(),
-        ];
+        $stack    = [$this->getInstance()];
         $response = Dispatcher::run($stack);
 
         $string = $response->getHeaderLine('X-Response-Time');
@@ -29,9 +27,7 @@ class ResponseTimeMiddlewareTest extends AbstractCase
             'REQUEST_TIME_FLOAT' => microtime(true),
         ];
         $request      = Factory::createServerRequest('GET', '/', $serverParams);
-        $stack        = [
-            $this->getInstance(),
-        ];
+        $stack        = [$this->getInstance()];
         $response     = Dispatcher::run($stack, $request);
 
         $string = $response->getHeaderLine('X-Response-Time');

@@ -9,6 +9,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ResponseTimeMiddleware extends AbstractResponseTimeMiddleware
 {
+    /**
+     * @var string
+     */
     private const HEADER = 'X-Response-Time';
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
