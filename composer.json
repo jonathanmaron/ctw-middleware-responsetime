@@ -1,4 +1,4 @@
-{  "minimum-stability": "dev", "prefer-stable": true,  
+{
     "name": "ctw/ctw-middleware-responsetime",
     "description": "This PSR-15 middleware adds an X-Response-Time in milliseconds to the Response header.\n\n",
     "license": "BSD-3-Clause",
@@ -18,6 +18,8 @@
         "squizlabs/php_codesniffer": "^3.6",
         "symfony/var-dumper": "^7.0"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Ctw\\Middleware\\ResponseTimeMiddleware\\": "src"
