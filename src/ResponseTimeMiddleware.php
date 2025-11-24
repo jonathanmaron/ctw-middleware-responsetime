@@ -15,6 +15,7 @@ class ResponseTimeMiddleware extends AbstractResponseTimeMiddleware
     {
         $server    = $request->getServerParams();
         $startTime = $server['REQUEST_TIME_FLOAT'] ?? microtime(true);
+        assert(is_float($startTime) || is_int($startTime));
         $response  = $handler->handle($request);
         $endTime   = microtime(true);
 
