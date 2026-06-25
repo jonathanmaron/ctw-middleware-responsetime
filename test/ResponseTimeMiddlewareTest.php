@@ -88,11 +88,11 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
 
         $header = $response->getHeaderLine('X-Response-Time');
 
-        // Extract the numeric part
-        preg_match('/^(\d+\.\d{3}) ms$/', $header, $matches);
+        // Extract the numeric part; the regex enforces exactly three decimals.
+        $result = preg_match('/^(\d+\.\d{3}) ms$/', $header, $matches);
 
-        self::assertNotEmpty($matches);
-        self::assertCount(2, $matches);
+        self::assertSame(1, $result);
+        self::assertMatchesRegularExpression('/^\d+\.\d{3}$/', $matches[1]);
     }
 
     /**
