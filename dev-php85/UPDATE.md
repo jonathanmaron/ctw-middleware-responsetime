@@ -8,6 +8,33 @@ This is a **TODO list** of the changes required for this package to run cleanly
 under PHP 8.5.7. Nothing here has been fixed yet — the fixes happen in a second
 step. Boxes are intentionally left unchecked.
 
+---
+
+## ✅ Applied on `php85` (diactoros blocker resolved)
+
+> This banner supersedes the "❌ FAILS" analysis below, which captured the
+> pre-fix state.
+
+`composer update -W` is now **green**. Change to `composer.json`:
+
+- `ctw/ctw-middleware` `^4.0` → **`dev-php85`**
+
+That transitively installs the base package's PHP 8.5 fixes:
+`laminas/laminas-diactoros 3.8.0`, `middlewares/utils 4.0.2`,
+`laminas/laminas-servicemanager 4.5.1`. The five `middlewares/utils`
+"implicitly nullable parameter" deprecations listed in §2 are **cleared**
+(v4 declares explicit `?type` parameters).
+
+**Residual (separate from the diactoros blocker):**
+- The shared PHPStan `missingType.*` unmatched-ignore (§3) — owned by
+  `ctw/ctw-qa`, fix centrally there.
+- New "mock object without expectations" **PHPUnit notices**, surfaced by the
+  PHPUnit 12.4→12.5 upgrade (test-modernization; use `createStub()` or the
+  `#[AllowMockObjectsWithoutExpectations]` attribute). Not a PHP 8.5 issue.
+
+**Before merge:** re-tag `ctw/ctw-middleware` to a stable release and replace the
+`dev-php85` pin.
+
 Detection commands used:
 
 ```bash
