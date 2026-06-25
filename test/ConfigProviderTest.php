@@ -10,9 +10,9 @@ use Ctw\Middleware\ResponseTimeMiddleware\ResponseTimeMiddlewareFactory;
 final class ConfigProviderTest extends AbstractCase
 {
     /**
-     * Test that config provider returns correct structure
+     * Test that __invoke returns the complete dependency configuration structure when called.
      */
-    public function testConfigProvider(): void
+    public function testInvokeReturnsCompleteConfigurationStructure(): void
     {
         $configProvider = new ConfigProvider();
 
@@ -28,9 +28,9 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that invoke returns array with dependencies key
+     * Test that __invoke returns an array containing the 'dependencies' key when called.
      */
-    public function testInvokeReturnsDependenciesKey(): void
+    public function testInvokeReturnsArrayWithDependenciesKey(): void
     {
         $configProvider = new ConfigProvider();
         $config         = $configProvider();
@@ -39,9 +39,9 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that dependencies contains factories key
+     * Test that the dependencies array contains the 'factories' key when produced by __invoke.
      */
-    public function testDependenciesContainsFactoriesKey(): void
+    public function testInvokeDependenciesContainFactoriesKey(): void
     {
         $configProvider = new ConfigProvider();
         $config         = $configProvider();
@@ -52,9 +52,9 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that getDependencies returns array with factories
+     * Test that getDependencies returns an array containing the 'factories' key when called.
      */
-    public function testGetDependenciesReturnsFactories(): void
+    public function testGetDependenciesReturnsArrayWithFactoriesKey(): void
     {
         $configProvider = new ConfigProvider();
         $dependencies   = $configProvider->getDependencies();
@@ -63,9 +63,9 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that middleware class is registered in factories
+     * Test that the middleware class is registered as a factory key when getDependencies is called.
      */
-    public function testMiddlewareClassIsRegisteredInFactories(): void
+    public function testGetDependenciesRegistersMiddlewareInFactories(): void
     {
         $configProvider = new ConfigProvider();
         $dependencies   = $configProvider->getDependencies();
@@ -76,9 +76,9 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that factory class is correctly mapped
+     * Test that the middleware class maps to its factory class when getDependencies is called.
      */
-    public function testFactoryClassIsCorrectlyMapped(): void
+    public function testGetDependenciesMapsMiddlewareToFactory(): void
     {
         $configProvider = new ConfigProvider();
         $dependencies   = $configProvider->getDependencies();
@@ -89,20 +89,9 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that config provider can be instantiated
+     * Test that getDependencies returns the same data as the 'dependencies' entry of __invoke.
      */
-    public function testConfigProviderCanBeInstantiated(): void
-    {
-        $configProvider = new ConfigProvider();
-
-        // @phpstan-ignore-next-line
-        self::assertInstanceOf(ConfigProvider::class, $configProvider);
-    }
-
-    /**
-     * Test that getDependencies is consistent with invoke result
-     */
-    public function testGetDependenciesIsConsistentWithInvoke(): void
+    public function testGetDependenciesMatchesInvokeDependencies(): void
     {
         $configProvider = new ConfigProvider();
         $config         = $configProvider();

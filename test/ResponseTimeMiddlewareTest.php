@@ -14,9 +14,9 @@ use Psr\Http\Server\MiddlewareInterface;
 final class ResponseTimeMiddlewareTest extends AbstractCase
 {
     /**
-     * Test that middleware adds response time header
+     * Test that the middleware adds an X-Response-Time header in the expected millisecond format.
      */
-    public function testResponseTimeMiddleware(): void
+    public function testProcessAddsResponseTimeHeaderInMillisecondFormat(): void
     {
         $stack    = [$this->getInstance()];
         $response = Dispatcher::run($stack);
@@ -27,9 +27,9 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that middleware uses REQUEST_TIME_FLOAT when available
+     * Test that the middleware uses the REQUEST_TIME_FLOAT server param when it is provided.
      */
-    public function testResponseTimeMiddlewareAsFloat(): void
+    public function testProcessUsesRequestTimeFloatServerParamWhenAvailable(): void
     {
         $serverParams = [
             'REQUEST_TIME_FLOAT' => microtime(true),
@@ -44,7 +44,7 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that middleware implements MiddlewareInterface
+     * Test that the middleware implements MiddlewareInterface when instantiated through the factory.
      */
     public function testMiddlewareImplementsMiddlewareInterface(): void
     {
@@ -55,9 +55,9 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that header name is X-Response-Time
+     * Test that the response carries a header named exactly X-Response-Time.
      */
-    public function testHeaderNameIsXResponseTime(): void
+    public function testProcessAddsHeaderNamedXResponseTime(): void
     {
         $stack    = [$this->getInstance()];
         $response = Dispatcher::run($stack);
@@ -66,9 +66,9 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that response time is measured in milliseconds
+     * Test that the response time value is suffixed with the 'ms' millisecond unit.
      */
-    public function testResponseTimeIsMeasuredInMilliseconds(): void
+    public function testProcessReportsResponseTimeInMilliseconds(): void
     {
         $stack    = [$this->getInstance()];
         $response = Dispatcher::run($stack);
@@ -79,9 +79,9 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that response time has correct format with 3 decimal places
+     * Test that the response time value is formatted with exactly three decimal places.
      */
-    public function testResponseTimeHasThreeDecimalPlaces(): void
+    public function testProcessFormatsResponseTimeWithThreeDecimalPlaces(): void
     {
         $stack    = [$this->getInstance()];
         $response = Dispatcher::run($stack);
@@ -96,9 +96,9 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that response time is non-negative
+     * Test that the measured response time is never negative.
      */
-    public function testResponseTimeIsNonNegative(): void
+    public function testProcessReportsNonNegativeResponseTime(): void
     {
         $stack    = [$this->getInstance()];
         $response = Dispatcher::run($stack);
@@ -112,11 +112,11 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that response time with past REQUEST_TIME_FLOAT shows longer duration
+     * Test that a REQUEST_TIME_FLOAT 100ms in the past yields a duration of at least 100ms.
      */
-    public function testResponseTimeWithPastRequestTimeFloat(): void
+    public function testProcessReportsElapsedDurationFromPastRequestTimeFloat(): void
     {
-        $pastTime = microtime(true) - 0.1; // 100ms ago
+        $pastTime     = microtime(true) - 0.1; // 100ms ago
         $serverParams = [
             'REQUEST_TIME_FLOAT' => $pastTime,
         ];
@@ -134,9 +134,9 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that response time works with integer REQUEST_TIME
+     * Test that an integer REQUEST_TIME_FLOAT value still produces a valid millisecond header.
      */
-    public function testResponseTimeWithIntegerRequestTime(): void
+    public function testProcessHandlesIntegerRequestTimeFloat(): void
     {
         $serverParams = [
             'REQUEST_TIME_FLOAT' => time(),
@@ -151,9 +151,9 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that handler response is preserved
+     * Test that headers set by a downstream handler are preserved alongside the timing header.
      */
-    public function testHandlerResponseIsPreserved(): void
+    public function testProcessPreservesDownstreamResponseHeaders(): void
     {
         $stack = [
             $this->getInstance(),
@@ -178,9 +178,9 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that handler response status code is preserved
+     * Test that the status code set by a downstream handler is preserved by the middleware.
      */
-    public function testHandlerResponseStatusCodeIsPreserved(): void
+    public function testProcessPreservesDownstreamResponseStatusCode(): void
     {
         $stack = [
             $this->getInstance(),
@@ -204,9 +204,9 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that factory creates middleware instance
+     * Test that the factory produces a ResponseTimeMiddleware instance from the container.
      */
-    public function testFactoryCreatesMiddlewareInstance(): void
+    public function testFactoryCreatesResponseTimeMiddlewareInstance(): void
     {
         $container  = new ServiceManager();
         $factory    = new ResponseTimeMiddlewareFactory();
@@ -217,7 +217,7 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test various HTTP methods
+     * Provides representative HTTP methods exercised by the middleware.
      *
      * @return array<string, array{method: string}>
      */
@@ -243,10 +243,10 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that middleware works with various HTTP methods
+     * Test that the timing header is added regardless of the request HTTP method.
      */
     #[DataProvider('httpMethodProvider')]
-    public function testMiddlewareWorksWithVariousHttpMethods(string $method): void
+    public function testProcessAddsHeaderForAnyHttpMethod(string $method): void
     {
         $request  = Factory::createServerRequest($method, '/');
         $stack    = [$this->getInstance()];
@@ -256,33 +256,33 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test various URI paths
+     * Provides representative URI paths exercised by the middleware.
      *
      * @return array<string, array{path: string}>
      */
     public static function pathProvider(): array
     {
         return [
-            'root path'      => [
+            'root path'   => [
                 'path' => '/',
             ],
-            'simple path'    => [
+            'simple path' => [
                 'path' => '/api',
             ],
-            'nested path'    => [
+            'nested path' => [
                 'path' => '/api/v1/users',
             ],
-            'with query'     => [
+            'with query'  => [
                 'path' => '/search?q=test',
             ],
         ];
     }
 
     /**
-     * Test that middleware works with various paths
+     * Test that the timing header is added regardless of the request URI path.
      */
     #[DataProvider('pathProvider')]
-    public function testMiddlewareWorksWithVariousPaths(string $path): void
+    public function testProcessAddsHeaderForAnyRequestPath(string $path): void
     {
         $request  = Factory::createServerRequest('GET', $path);
         $stack    = [$this->getInstance()];
