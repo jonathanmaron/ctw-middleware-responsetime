@@ -151,6 +151,22 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
+     * Test that the guard assertion rejects a REQUEST_TIME_FLOAT that is neither a float nor an int.
+     */
+    public function testProcessRejectsNonNumericRequestTimeFloat(): void
+    {
+        $serverParams = [
+            'REQUEST_TIME_FLOAT' => 'not-a-number',
+        ];
+        $request = Factory::createServerRequest('GET', '/', $serverParams);
+        $stack   = [$this->getInstance()];
+
+        $this->expectException(\AssertionError::class);
+
+        Dispatcher::run($stack, $request);
+    }
+
+    /**
      * Test that headers set by a downstream handler are preserved alongside the timing header.
      */
     public function testProcessPreservesDownstreamResponseHeaders(): void
