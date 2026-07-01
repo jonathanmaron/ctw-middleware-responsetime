@@ -151,7 +151,7 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that the guard assertion rejects a REQUEST_TIME_FLOAT that is neither a float nor an int.
+     * Test that the guard rejects a REQUEST_TIME_FLOAT that is neither a float nor an int.
      */
     public function testProcessRejectsNonNumericRequestTimeFloat(): void
     {
@@ -161,7 +161,7 @@ final class ResponseTimeMiddlewareTest extends AbstractCase
         $request = Factory::createServerRequest('GET', '/', $serverParams);
         $stack   = [$this->getInstance()];
 
-        $this->expectException(\AssertionError::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         Dispatcher::run($stack, $request);
     }
