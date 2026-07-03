@@ -11,6 +11,7 @@ class ResponseTimeMiddleware extends AbstractResponseTimeMiddleware
 {
     private const string HEADER = 'X-Response-Time';
 
+    #[\Override]
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $server    = $request->getServerParams();
